@@ -2674,6 +2674,9 @@ UNIFORMES.forEach(u => { u.exp = `Uniforme ${u.a}: ${u.b}.`; if (u.ex) u.exl = "
 const ALFABETO = "Alpha Bravo Charlie Delta Echo Foxtrot Golf Hotel India Juliet Kilo Lima Mike November Oscar Papa Quebec Romeo Sierra Tango Uniform Victor Whiskey X-ray Yankee Zulu"
   .split(" ").map(w => ({ a: w[0], b: w, g: "l" }));
 ALFABETO.forEach(l => { l.exp = `${l.a}: ${l.b}.`; });
+/* Grafías que también se aceptan al escribir (la OACI usa Alfa y Juliett). */
+const ALFABETO_ALT = { Alpha: ["Alfa"], Juliet: ["Juliett"], Whiskey: ["Whisky"], "X-ray": ["Xray", "Equis ray"] };
+ALFABETO.forEach(l => { l.alt = ALFABETO_ALT[l.b] || []; });
 
 /* Códigos Q de radiocomunicación (de la imagen que pasó el alumno). */
 const CODIGOS_Q = [
@@ -2893,7 +2896,7 @@ const SUBJECTS = {
       { fig: "zonas", title: "Mapa de Prefecturas de Zona", small: "Ubicás las 10 zonas en el mapa · elegir o escribir" },
       { deck: "zonas", mode: "mix", title: "Prefecturas de Zona y sedes", small: "Las 10 zonas con su sede, en los dos sentidos", thumb: () => pinsThumb() },
       { deck: "uniformes", mode: "mix", title: "Uniformes por número", small: "Del N° 1 al N° 9, con la foto del reglamento y su uso", thumb: () => `<img class="foto" src="${UNIF_IMG.u4}" alt="">` },
-      { deck: "alfabeto", mode: "mix", title: "Alfabeto fonético", small: "Letra ↔ palabra: Alpha, Bravo, Charlie…", thumb: () => tokensThumb(["A", "B", "C", "Z"]) },
+      { deck: "alfabeto", mode: "write", title: "Alfabeto fonético", small: "Ves la letra y escribís la palabra: Alpha, Bravo, Charlie…", thumb: () => tokensThumb(["A", "B", "C", "Z"]) },
       { deck: "codigosq", mode: "mix", title: "Códigos Q", small: "Radiocomunicación: QTH, QSL, QAP… en los dos sentidos", thumb: () => tokensThumb(["QTH", "QSL", "QAP", "QRV"]) }
     ]
   },
@@ -2928,13 +2931,16 @@ const DECKS = {
   codigosq: { title: "Códigos Q de radiocomunicación", n: 15, items: CODIGOS_Q,
     qab: it => `¿Qué significa el código «${it.a}»?`, qba: it => `¿Qué código Q significa «${it.b}»?`, sub: { mix: "Código ↔ significado" } },
   alfabeto: { title: "Alfabeto fonético", n: 15, items: ALFABETO,
-    qab: it => `¿Qué palabra corresponde a la letra «${it.a}»?`, qba: it => `¿Qué letra se dice «${it.b}»?`, sub: { mix: "Letra ↔ palabra" } },
+    qwrite: it => `¿Qué palabra corresponde a la letra «${it.a}»?`, wtext: it => `${it.a} = {{${[it.b, ...it.alt].join("|")}}}`,
+    qab: it => `¿Qué palabra corresponde a la letra «${it.a}»?`, qba: it => `¿Qué letra se dice «${it.b}»?`, sub: { mix: "Letra ↔ palabra", write: "Letra → palabra (escribir)" } },
   uniformes: { title: "Uniformes por número", n: 9, items: UNIFORMES.map((u, i) => ({ ...u, img: UNIF_IMG["u" + (i + 1)] })), alwaysImg: true, imgAlt: "Foto del uniforme, del reglamento",
     qab: it => `¿Qué uniforme es el ${it.a}?`, qba: it => `¿Qué número tiene el uniforme ${it.b}?`, sub: { mix: "Número ↔ uniforme" } }
 };
 function buildDeck(id, mode) {
   const D = DECKS[id], items = D.items;
   return shuffle(items).slice(0, D.n).map(it => {
+    if (mode === "write") return { t: "fill", q: D.qwrite(it), text: D.wtext(it), chip: "Escribir", hint: "Escribí la palabra. Se acepta sin tildes ni mayúsculas.",
+      exp: it.exp || `${it.a}: ${it.b}.`, src: D.title, key: `deck-${id}-${it.a}` };
     const m = mode === "mix" ? (Math.random() < .5 ? "ab" : "ba") : mode;
     const same = shuffle(items.filter(x => x !== it && x.g === it.g)).slice(0, 2);
     const ds = [...same, ...shuffle(items.filter(x => x !== it && !same.includes(x)))].slice(0, 3);
@@ -2954,7 +2960,7 @@ const FIG_PRACTICE = [
   { key: "anima", title: "Calibre real y nominal", sub: "Corte del cañón estriado" },
   { key: "zonas", subj: "ori", title: "Mapa de Prefecturas de Zona", sub: "Ubicá las 10 zonas en el mapa" }
 ];
-const typeLabel = q => (q.t === "label" && FIGS[q.fig] && FIGS[q.fig].typeLabel) || TYPE_LABEL[q.t];
+const typeLabel = q => q.chip || (q.t === "label" && FIGS[q.fig] && FIGS[q.fig].typeLabel) || TYPE_LABEL[q.t];
 
 /* ---------- Reglas de oro para completar (espacios al azar) ---------- */
 const GOLD_RULES = [
@@ -3315,7 +3321,7 @@ function renderQuestion() {
       <button class="opt" data-v="1" aria-pressed="false" id="opt-v">Verdadero</button>
       <button class="opt" data-v="0" aria-pressed="false" id="opt-f">Falso</button></div>`;
   } else if (q.t === "fill") {
-    hint = "Escribí la palabra que falta en cada espacio. Se acepta sin tildes ni mayúsculas.";
+    hint = q.hint || "Escribí la palabra que falta en cada espacio. Se acepta sin tildes ni mayúsculas.";
     const lines = [[]];
     v.parsed.segs.forEach(s => {
       if (s.text != null) {
@@ -3542,7 +3548,7 @@ function showFeedback(v, g) {
       const typed = (v.vals[i] || "").trim();
       let note = "";
       if (!r.ok) note = `<span class="fix bad">${esc(r.show)}</span>`;
-      else if (typed !== r.show) note = `<span class="fix ok">se escribe: ${esc(r.show)}</span>`;
+      else if (typed.toLocaleLowerCase("es") !== r.show.toLocaleLowerCase("es")) note = `<span class="fix ok">se escribe: ${esc(r.show)}</span>`;
       if (note) inp.insertAdjacentHTML("afterend", note);
     });
   } else if (q.t === "order") {
