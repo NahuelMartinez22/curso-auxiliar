@@ -161,6 +161,13 @@ main.home .wrap { padding-block: 28px 48px; display: grid; gap: 28px; }
 .figbtn:hover { border-color: var(--accent); }
 .figbtn .th { width: 104px; height: 84px; background: var(--plate); border-radius: 6px; overflow: hidden; display: grid; place-items: center; border: 1px solid var(--line); }
 .figbtn .th svg { width: 100%; height: 100%; display: block; }
+.figbtn .th .lead-l { stroke: var(--plate-line); stroke-width: 1.6; }
+.figbtn .th .lead-h { stroke: var(--plate); stroke-width: 5; }
+.figbtn .th .tdot { fill: var(--plate-ink); }
+.figbtn .th .mk circle { fill: #c99634; stroke: var(--plate-ink); stroke-width: 2; }
+.figbtn .th .mk text { fill: var(--plate-ink); font-family: var(--f-mono); font-weight: 600; text-anchor: middle; dominant-baseline: central; }
+.figbtn .th .mk.pill rect { fill: #1d97dc; stroke: #ffffff; stroke-width: 1.5; }
+.figbtn .th .mk.pill text { fill: #ffffff; font-family: var(--f-body); font-weight: 700; }
 .figbtn .tx { display: grid; gap: 4px; min-width: 0; }
 .figbtn b { font-family: var(--f-display); font-size: 21px; text-transform: uppercase; line-height: 1.05; letter-spacing: .01em; }
 .figbtn small { color: var(--muted); font-size: 14px; line-height: 1.35; }
@@ -2877,10 +2884,10 @@ const SUBJECTS = {
     lead: `Preguntas armadas con el material de las Unidades 1 a 4 (la Unidad 4 está dividida en sus tres clases). <b>Modo estudio:</b> después de cada respuesta ves la corrección, la explicación con el artículo y un ejemplo. Se aprueba con <b>${PASS} %</b>.`,
     types: ["Opción múltiple", "Verdadero o falso"],
     finalTxt: `${FINAL_N} preguntas sorteadas de las Unidades 1 a 4, con las tres clases de la Unidad 4.`,
-    quickTxt: "cada delito en una línea · 15 al azar, con su artículo",
+    quickTxt: `cada delito en una línea · las ${LINES_RF.length} figuras en cada repaso, con su artículo`,
     quick: [
-      { deck: "delitos", mode: "ba", title: "¿Qué delito es?", small: "Leés la definición y elegís el delito o concepto", thumb: () => linesThumb(true) },
-      { deck: "delitos", mode: "ab", title: "¿Qué significa?", small: "Leés el nombre del delito y elegís su definición", thumb: () => linesThumb(false) }
+      { deck: "delitos", mode: "ba", title: "¿Qué delito es?", small: `Las ${LINES_RF.length} definiciones: elegís el delito o concepto`, thumb: () => linesThumb(true) },
+      { deck: "delitos", mode: "ab", title: "¿Qué significa?", small: `Los ${LINES_RF.length} delitos y conceptos: elegís su definición`, thumb: () => linesThumb(false) }
     ]
   },
   ori: {
@@ -2891,13 +2898,13 @@ const SUBJECTS = {
     finalTxt: `${FINAL_N} preguntas sorteadas de todas las unidades.`,
     quickTxt: "jerarquías, siglas, mapa y sedes de las Prefecturas de Zona, uniformes, alfabeto fonético y códigos Q",
     quick: [
-      { deck: "insignias", mode: "img", title: "Jerarquías", small: "Mirás la insignia y elegís la jerarquía", thumb: () => `<img src="${INSIG.op}" alt="">` },
-      { deck: "siglas", mode: "mix", title: "Siglas de jerarquías", small: "PG, OX, AI… en los dos sentidos", thumb: () => tokensThumb(["PG", "OX", "AI", "CS"]) },
+      { deck: "insignias", mode: "img", title: "Jerarquías", small: `Las ${INSIGNIAS.length} insignias: mirás la insignia y elegís la jerarquía`, thumb: () => `<img src="${INSIG.op}" alt="">` },
+      { deck: "siglas", mode: "mix", title: "Siglas de jerarquías", small: `Las ${JERARQ.length} siglas (PG, OX, AI…) en los dos sentidos`, thumb: () => tokensThumb(["PG", "OX", "AI", "CS"]) },
       { fig: "zonas", title: "Mapa de Prefecturas de Zona", small: "Ubicás las 10 zonas en el mapa · elegir o escribir" },
       { deck: "zonas", mode: "mix", title: "Prefecturas de Zona y sedes", small: "Las 10 zonas con su sede, en los dos sentidos", thumb: () => pinsThumb() },
-      { deck: "uniformes", mode: "mix", title: "Uniformes por número", small: "Del N° 1 al N° 9, con la foto del reglamento y su uso", thumb: () => `<img class="foto" src="${UNIF_IMG.u4}" alt="">` },
+      { deck: "uniformes", mode: "mix", title: "Uniformes por número", small: `Los ${UNIFORMES.length} uniformes, con la foto del reglamento y su uso`, thumb: () => `<img class="foto" src="${UNIF_IMG.u4}" alt="">` },
       { deck: "alfabeto", mode: "write", title: "Alfabeto fonético", small: "Las 26 letras: ves la letra y escribís la palabra", thumb: () => tokensThumb(["A", "B", "C", "Z"]) },
-      { deck: "codigosq", mode: "mix", title: "Códigos Q", small: "Radiocomunicación: QTH, QSL, QAP… en los dos sentidos", thumb: () => tokensThumb(["QTH", "QSL", "QAP", "QRV"]) }
+      { deck: "codigosq", mode: "mix", title: "Códigos Q", small: `Los ${CODIGOS_Q.length} códigos (QTH, QSL, QAP…) en los dos sentidos`, thumb: () => tokensThumb(["QTH", "QSL", "QAP", "QRV"]) }
     ]
   },
   tya: {
@@ -2918,27 +2925,27 @@ window.addEventListener("hashchange", () => {
 
 /* ---------- Repasos rápidos (tarjetas de dos lados) ---------- */
 const DECKS = {
-  delitos: { title: "Cada delito en una línea", n: 15,
+  delitos: { title: "Cada delito en una línea",
     items: LINES_RF.map(L => ({ a: L.n, b: L.d, g: L.g, exp: `${L.n} (${L.art}): ${L.d}`, ex: L.ex })),
     qab: it => `¿Qué definición corresponde a «${it.a}»?`, qba: it => `¿Qué delito o concepto es? «${it.b}»`,
     sub: { ab: "Del delito a la definición", ba: "De la definición al delito" } },
-  insignias: { title: "Jerarquías", n: 12, items: INSIGNIAS.map(i => ({ ...i, img: INSIG[i.k] })),
+  insignias: { title: "Jerarquías", items: INSIGNIAS.map(i => ({ ...i, img: INSIG[i.k] })),
     qimg: () => "¿A qué jerarquía o cargo corresponde esta insignia?", sub: { img: "Insignia → jerarquía" } },
-  siglas: { title: "Siglas de las jerarquías", n: 16, items: JERARQ,
+  siglas: { title: "Siglas de las jerarquías", items: JERARQ,
     qab: it => `¿Qué jerarquía es «${it.a}»?`, qba: it => `¿Cuál es la sigla de ${it.b}?`, sub: { mix: "Sigla ↔ jerarquía" } },
-  zonas: { title: "Prefecturas de Zona", n: 10, items: ZONAS,
+  zonas: { title: "Prefecturas de Zona", items: ZONAS,
     qab: it => `¿Dónde tiene su sede la ${it.a}?`, qba: it => `¿Qué Prefectura de Zona tiene su sede en ${it.b}?`, sub: { mix: "Zona ↔ sede" } },
-  codigosq: { title: "Códigos Q de radiocomunicación", n: 15, items: CODIGOS_Q,
+  codigosq: { title: "Códigos Q de radiocomunicación", items: CODIGOS_Q,
     qab: it => `¿Qué significa el código «${it.a}»?`, qba: it => `¿Qué código Q significa «${it.b}»?`, sub: { mix: "Código ↔ significado" } },
-  alfabeto: { title: "Alfabeto fonético", n: 26, items: ALFABETO,
+  alfabeto: { title: "Alfabeto fonético", items: ALFABETO,
     qwrite: it => `¿Qué palabra corresponde a la letra «${it.a}»?`, wtext: it => `${it.a} = {{${[it.b, ...it.alt].join("|")}}}`,
     qab: it => `¿Qué palabra corresponde a la letra «${it.a}»?`, qba: it => `¿Qué letra se dice «${it.b}»?`, sub: { mix: "Letra ↔ palabra", write: "Letra → palabra (escribir)" } },
-  uniformes: { title: "Uniformes por número", n: 9, items: UNIFORMES.map((u, i) => ({ ...u, img: UNIF_IMG["u" + (i + 1)] })), alwaysImg: true, imgAlt: "Foto del uniforme, del reglamento",
+  uniformes: { title: "Uniformes por número", items: UNIFORMES.map((u, i) => ({ ...u, img: UNIF_IMG["u" + (i + 1)] })), alwaysImg: true, imgAlt: "Foto del uniforme, del reglamento",
     qab: it => `¿Qué uniforme es el ${it.a}?`, qba: it => `¿Qué número tiene el uniforme ${it.b}?`, sub: { mix: "Número ↔ uniforme" } }
 };
 function buildDeck(id, mode) {
   const D = DECKS[id], items = D.items;
-  return shuffle(items).slice(0, D.n).map(it => {
+  return shuffle(items).map(it => {  /* siempre todos los elementos, en orden al azar */
     if (mode === "write") return { t: "fill", q: D.qwrite(it), text: D.wtext(it), chip: "Escribir", hint: "Escribí la palabra. Se acepta sin tildes ni mayúsculas.",
       exp: it.exp || `${it.a}: ${it.b}.`, src: D.title, key: `deck-${id}-${it.a}` };
     const m = mode === "mix" ? (Math.random() < .5 ? "ab" : "ba") : mode;
