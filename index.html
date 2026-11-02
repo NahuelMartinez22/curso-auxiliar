@@ -2896,7 +2896,7 @@ const SUBJECTS = {
       { fig: "zonas", title: "Mapa de Prefecturas de Zona", small: "Ubicás las 10 zonas en el mapa · elegir o escribir" },
       { deck: "zonas", mode: "mix", title: "Prefecturas de Zona y sedes", small: "Las 10 zonas con su sede, en los dos sentidos", thumb: () => pinsThumb() },
       { deck: "uniformes", mode: "mix", title: "Uniformes por número", small: "Del N° 1 al N° 9, con la foto del reglamento y su uso", thumb: () => `<img class="foto" src="${UNIF_IMG.u4}" alt="">` },
-      { deck: "alfabeto", mode: "write", title: "Alfabeto fonético", small: "Ves la letra y escribís la palabra: Alpha, Bravo, Charlie…", thumb: () => tokensThumb(["A", "B", "C", "Z"]) },
+      { deck: "alfabeto", mode: "write", title: "Alfabeto fonético", small: "Las 26 letras: ves la letra y escribís la palabra", thumb: () => tokensThumb(["A", "B", "C", "Z"]) },
       { deck: "codigosq", mode: "mix", title: "Códigos Q", small: "Radiocomunicación: QTH, QSL, QAP… en los dos sentidos", thumb: () => tokensThumb(["QTH", "QSL", "QAP", "QRV"]) }
     ]
   },
@@ -2930,7 +2930,7 @@ const DECKS = {
     qab: it => `¿Dónde tiene su sede la ${it.a}?`, qba: it => `¿Qué Prefectura de Zona tiene su sede en ${it.b}?`, sub: { mix: "Zona ↔ sede" } },
   codigosq: { title: "Códigos Q de radiocomunicación", n: 15, items: CODIGOS_Q,
     qab: it => `¿Qué significa el código «${it.a}»?`, qba: it => `¿Qué código Q significa «${it.b}»?`, sub: { mix: "Código ↔ significado" } },
-  alfabeto: { title: "Alfabeto fonético", n: 15, items: ALFABETO,
+  alfabeto: { title: "Alfabeto fonético", n: 26, items: ALFABETO,
     qwrite: it => `¿Qué palabra corresponde a la letra «${it.a}»?`, wtext: it => `${it.a} = {{${[it.b, ...it.alt].join("|")}}}`,
     qab: it => `¿Qué palabra corresponde a la letra «${it.a}»?`, qba: it => `¿Qué letra se dice «${it.b}»?`, sub: { mix: "Letra ↔ palabra", write: "Letra → palabra (escribir)" } },
   uniformes: { title: "Uniformes por número", n: 9, items: UNIFORMES.map((u, i) => ({ ...u, img: UNIF_IMG["u" + (i + 1)] })), alwaysImg: true, imgAlt: "Foto del uniforme, del reglamento",
