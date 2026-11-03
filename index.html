@@ -349,6 +349,9 @@ mark.miss { background: transparent; color: var(--bad); font-weight: 700; text-d
 .fb ol { margin: 0; padding-left: 22px; }
 .qactions { padding: 14px 20px 18px; display: flex; justify-content: flex-end; gap: 10px; flex-wrap: wrap; border-top: 1px solid var(--line); }
 .kbd { font-family: var(--f-mono); font-size: 12px; color: var(--muted); margin-right: auto; align-self: center; }
+#prev { margin-right: auto; }
+#prev + .kbd, #prev + #names { margin-left: 0; }
+#prev ~ .kbd { margin-right: 0; }
 @media (max-width: 560px) { .kbd { display: none; } .qbody, .qhead, .fb, .qactions { padding-left: 14px; padding-right: 14px; } }
 
 /* ---------- Resultados ---------- */
@@ -4118,14 +4121,14 @@ function renderQuestion() {
       <button type="button" data-rmode="write" aria-pressed="${q.t === "rtext"}">Escribir</button></div>` + body;
   $("#qwrap").innerHTML = `
   <article class="qcard">
-    <div class="qhead"><span class="qnum">Pregunta ${S.i + 1} de ${n}</span><span class="chip">${typeLabel(q)}</span></div>
+    <div class="qhead"><span class="qnum">Pregunta ${S.i + 1} de ${n}${v.g ? " · ya respondida" : ""}</span><span class="chip">${typeLabel(q)}</span></div>
     <div class="qbody">
       <h2 class="qtext">${esc(q.q)}</h2>
       ${hint ? `<p class="hint">${hint}</p>` : ""}
       ${body}
     </div>
     <div class="fb" id="fb" hidden></div>
-    <div class="qactions">${S.kind === "fig" ? `<button class="btn" id="names" style="margin-right:auto" aria-pressed="false">Mostrar nombres</button>` : `<span class="kbd">${q.t === "mc" ? "Teclas A–D y Enter" : q.t === "tf" ? "Teclas V / F y Enter" : q.t === "rtext" ? "" : "Enter para comprobar"}</span>`}
+    <div class="qactions">${S.i > 0 ? `<button class="btn" id="prev" aria-label="Ver la pregunta anterior">← Anterior</button>` : ""}${S.kind === "fig" ? `<button class="btn" id="names" style="margin-right:auto" aria-pressed="false">Mostrar nombres</button>` : `<span class="kbd">${q.t === "mc" ? "Teclas A–D y Enter" : q.t === "tf" ? "Teclas V / F y Enter" : q.t === "rtext" ? "" : "Enter para comprobar"}</span>`}
       <button class="btn primary" id="act">Comprobar</button></div>
   </article>`;
   drawFig(v);
@@ -4143,8 +4146,26 @@ function renderQuestion() {
     const lg = $("#legend"), show = lg.hidden;
     lg.hidden = !show; nb.textContent = show ? "Ocultar nombres" : "Mostrar nombres"; nb.setAttribute("aria-pressed", String(show));
   };
+  const pb = $("#prev");
+  if (pb) pb.onclick = () => { S.i--; renderQuestion(); window.scrollTo({ top: 0 }); };
+  if (v.g) { restoreAnswered(v); return; }
   const first = $("#qwrap input, #qwrap select");
   if (first && window.matchMedia("(pointer:fine)").matches) first.focus({ preventScroll: true });
+}
+
+/* Volver a ver una pregunta ya respondida: muestra tu respuesta y la corrección, sin poder cambiarla. */
+function restoreAnswered(v) {
+  const q = v.q;
+  if (q.t === "mc" || q.t === "tf") $$(".opt").forEach(b => b.setAttribute("aria-pressed", String(q.t === "mc" ? +b.dataset.k === v.sel : (b.dataset.v === "1") === v.sel)));
+  if (q.t === "fill") (v.vals || []).forEach((val, i) => { const el = $(`#b-${S.i}-${i}`); if (el) el.value = val; });
+  if (q.t === "rtext") (v.texts || []).forEach((val, i) => { const el = $(`#rt-${S.i}-${i}`); if (el) el.value = val; });
+  if (q.t === "label") FIGS[q.fig].targets.forEach(t => { const el = $(`#sel-${S.i}-${t.n}`); if (el) el.value = v.choices[t.n] || ""; });
+  S.checked = true;
+  showFeedback(v, v.g, true);
+  const act = $("#act");
+  act.textContent = S.i === S.views.length - 1 ? "Ver resultados" : "Siguiente";
+  act.disabled = false;
+  $("#progbar").style.width = `${((S.i + 1) / S.views.length) * 100}%`;
 }
 
 function drawFig(v) {
@@ -4282,7 +4303,7 @@ function check() {
   $("#progbar").style.width = `${((S.i + 1) / S.views.length) * 100}%`;
 }
 
-function showFeedback(v, g) {
+function showFeedback(v, g, quiet) {
   const q = v.q, fb = $("#fb");
   const cls = g.score === 1 ? "ok" : g.score === 0 ? "bad" : "part";
   let verdict = g.score === 1 ? "Correcto" : g.score === 0 ? "Incorrecto" : "Parcialmente correcto";
@@ -4333,7 +4354,7 @@ function showFeedback(v, g) {
   fb.className = `fb ${cls}`;
   fb.innerHTML = `<p class="verdict">${verdict}</p>${extra}<p>${esc(q.exp)}</p>${exBox(q)}<p class="src">Fuente: ${esc(srcLine(q))}</p>`;
   fb.hidden = false;
-  if (window.innerWidth < 700) fb.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  if (!quiet && window.innerWidth < 700) fb.scrollIntoView({ behavior: "smooth", block: "nearest" });
 }
 
 function next() {
