@@ -3600,6 +3600,9 @@ ALL_UNITS.forEach(u => {
 });
 
 /* ---------- Materias ---------- */
+/* Conocimientos Náuticos: por ahora solo se muestran las Unidades 6 y 7. Las 1 a 5 quedan cargadas para más adelante. */
+const CN_VISIBLES = ["n6", "n7"];
+const TERMINOS_CN_VIS = TERMINOS_CN.filter(t => CN_VISIBLES.includes("n" + t.g.slice(1)));
 const SUBJECTS = {
   rf: {
     id: "rf", hash: "regimen", name: "Régimen del Ejercicio de la Función Policial", doc: "Régimen policial · Curso Auxiliar",
@@ -3639,14 +3642,14 @@ const SUBJECTS = {
   },
   cn: {
     id: "cn", hash: "nauticos", name: "Conocimientos Náuticos", doc: "Conocimientos Náuticos · Curso Auxiliar",
-    units: UNITS_CN, unitsTxt: "Unidades 1 a 7", finalId: "final-cn", icon: s => compassIcon(s),
-    lead: `Preguntas armadas con <b>apuntes de clase</b> de las Unidades 1 a 7 (todavía no hay material oficial; las Unidades 6 y 7 están incompletas). <b>Modo estudio:</b> después de cada respuesta ves la corrección, la explicación y, cuando ayuda, un ejemplo. Se aprueba con <b>${PASS} %</b>.`,
+    units: UNITS_CN.filter(u => CN_VISIBLES.includes(u.id)), unitsTxt: "Unidades 6 y 7", finalId: "final-cn", icon: s => compassIcon(s),
+    lead: `Preguntas armadas con <b>apuntes de clase</b> de las Unidades 6 y 7 (todavía no hay material oficial y los apuntes no cubren todo el programa). <b>Modo estudio:</b> después de cada respuesta ves la corrección, la explicación y, cuando ayuda, un ejemplo. Se aprueba con <b>${PASS} %</b>.`,
     types: ["Opción múltiple", "Verdadero o falso", "Términos náuticos"],
-    finalTxt: `${FINAL_N} preguntas sorteadas de las 7 unidades.`,
-    quickTxt: `los ${TERMINOS_CN.length} términos náuticos de los apuntes, en los dos sentidos`,
+    finalTxt: `Todas las preguntas de las Unidades 6 y 7 mezcladas.`,
+    quickTxt: `los ${TERMINOS_CN_VIS.length} términos de las Unidades 6 y 7, en los dos sentidos`,
     quick: [
-      { deck: "terminos", mode: "ba", title: "¿Qué término es?", small: `Las ${TERMINOS_CN.length} definiciones: elegís el término`, thumb: () => tokensThumb(["Proa", "Popa", "Manga", "Nudo"]) },
-      { deck: "terminos", mode: "ab", title: "¿Qué significa?", small: `Los ${TERMINOS_CN.length} términos: elegís la definición`, thumb: () => tokensThumb(["SOLAS", "SAR", "MAS", "AIS"]) }
+      { deck: "terminos", mode: "ba", title: "¿Qué término es?", small: `Las ${TERMINOS_CN_VIS.length} definiciones: elegís el término`, thumb: () => tokensThumb(["SOLAS", "SAR", "AIS", "MAS"]) },
+      { deck: "terminos", mode: "ab", title: "¿Qué significa?", small: `Los ${TERMINOS_CN_VIS.length} términos: elegís la definición`, thumb: () => tokensThumb(["SAR", "SOLAS", "MAS", "AIS"]) }
     ]
   }
 };
@@ -3679,7 +3682,7 @@ const DECKS = {
   alfabeto: { title: "Alfabeto fonético", items: ALFABETO,
     qwrite: it => `¿Qué palabra corresponde a la letra «${it.a}»?`, wtext: it => `${it.a} = {{${[it.b, ...it.alt].join("|")}}}`,
     qab: it => `¿Qué palabra corresponde a la letra «${it.a}»?`, qba: it => `¿Qué letra se dice «${it.b}»?`, sub: { mix: "Letra ↔ palabra", write: "Letra → palabra (escribir)" } },
-  terminos: { title: "Términos náuticos", items: TERMINOS_CN,
+  terminos: { title: "Términos náuticos", items: TERMINOS_CN_VIS,
     qab: it => `¿Qué significa «${it.a}»?`, qba: it => `¿Qué término corresponde a: «${it.b}»?`, sub: { ab: "Del término a la definición", ba: "De la definición al término" } },
   uniformes: { title: "Uniformes por número", items: UNIFORMES.map((u, i) => ({ ...u, img: UNIF_IMG["u" + (i + 1)] })), alwaysImg: true, imgAlt: "Foto del uniforme, del reglamento",
     qab: it => `¿Qué uniforme es el ${it.a}?`, qba: it => `¿Qué número tiene el uniforme ${it.b}?`, sub: { mix: "Número ↔ uniforme" } }

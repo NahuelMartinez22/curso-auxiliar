@@ -5,7 +5,7 @@ Preguntas para estudiar las materias del Curso de Formación Básica para Cuerpo
 - **Régimen del Ejercicio de la Función Policial**: Unidades 1 a 4 (la 4 dividida en sus tres clases), con ejemplos en cada respuesta y el repaso «Cada delito en una línea».
 - **Organización y Reglamentos Internos**: Unidades 1, 2, 3 (cargos y jerarquías), 4 y 6, con repasos de jerarquías, siglas, mapa y sedes de las Prefecturas de Zona, uniformes, alfabeto fonético y códigos Q.
 - **Tiro y Armas**: 6 unidades, con imágenes para identificar partes y las reglas de oro.
-- **Conocimientos Náuticos**: Unidades 1 a 7, armadas con apuntes de clase (las 6 y 7 incompletas), con el repaso de términos náuticos.
+- **Conocimientos Náuticos**: Unidades 6 y 7, armadas con apuntes de clase, con el repaso de términos.
 
 Material de estudio para alumnos. No es un HTML oficial de la Prefectura Naval Argentina.
 
