@@ -4300,6 +4300,11 @@ function check() {
   const act = $("#act");
   act.textContent = S.i === S.views.length - 1 ? "Ver resultados" : "Siguiente";
   act.disabled = false; act.focus({ preventScroll: true });
+  /* En los repasos de una sola imagen o de reglas de oro: volver a intentar la misma, desde cero. */
+  if ((S.kind === "fig" || S.kind === "rules") && !$("#retry")) {
+    act.insertAdjacentHTML("beforebegin", `<button class="btn" id="retry">Reintentar</button>`);
+    $("#retry").onclick = () => S.kind === "fig" ? startQuiz("fig", S.figKey) : startQuiz("rules");
+  }
   $("#progbar").style.width = `${((S.i + 1) / S.views.length) * 100}%`;
 }
 
