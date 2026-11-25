@@ -3002,7 +3002,7 @@ FIGS.zonas.targets.forEach(t => { t.tx = t.lx; t.ty = t.ly; t.alts = ["Prefectur
 
 /* ---------- Conocimientos Náuticos ----------
    Fuente: apuntes de clase (carpeta de un compañero, fotos 24 a 31) y la transcripción de apuntes de la Unidad 6.
-   No hay material oficial todavía: las Unidades 6 y 7 están incompletas respecto del programa. */
+   No hay material oficial todavía. Se muestran las 7 unidades; los repasos son los dibujos del buque y las palabras y siglas. */
 const UNITS_CN = [
 {
   id: "n1", num: 1, title: "Nomenclatura marinera",
@@ -3509,34 +3509,476 @@ const UNITS_CN = [
 }
 ];
 
-/* Repaso rápido: términos náuticos (término ↔ definición). g = unidad, para elegir distractores parecidos. */
-const TERMINOS_CN = [
-  ["Eslora", "Largo del buque", "u1"], ["Manga", "Ancho del buque", "u1"], ["Puntal", "Altura desde la quilla hasta la cubierta", "u1"],
-  ["Calado", "Distancia desde la quilla hasta la línea de flotación", "u1"], ["Francobordo", "Distancia desde la línea de flotación hasta la cubierta", "u1"],
-  ["Línea de crujía", "Línea que divide el buque a la mitad, entre babor y estribor", "u1"], ["Babor", "Banda izquierda, mirando hacia proa", "u1"],
-  ["Estribor", "Banda derecha, mirando hacia proa", "u1"], ["Estanqueidad", "Sellado para que no ingrese el agua", "u1"],
-  ["Estabilidad", "Capacidad de volver al estado de reposo inicial", "u1"], ["Artefacto naval", "Construcción flotante sin propulsión ni gobierno", "u1"],
-  ["Cuadernas", "Las costillas del buque", "u2"], ["Puente de navegación", "Lugar donde está el capitán", "u2"], ["Sala de máquinas", "Lugar donde está el motor", "u2"],
-  ["Rumbo", "Agujero en el casco", "u2"], ["Acoderarse", "Colocarse al lado de otro buque", "u2"], ["Amarrar", "Sujetar el buque a un muelle", "u2"],
-  ["Fondear", "Echar el ancla donde no hay dónde amarrar", "u2"], ["Cabrestante", "Motor que baja el ancla", "u2"], ["Desplazamiento", "Peso del buque", "u2"],
-  ["Arqueo", "Volumen del buque en metros cúbicos", "u2"], ["Porte", "Capacidad del buque destinada a la carga", "u2"],
+/* Preguntas nuevas de los apuntes (se agregan al final de cada unidad). En mc, la PRIMERA opción es la correcta. */
+const CN_EXTRA = {
+  n2: [
+    { t: "mc", q: "¿Dónde se afirman los cabos en la cubierta?",
+      o: ["En la bita", "En el cabrestante", "En la bocina", "En el codaste"],
+      exp: "La bita es la pieza de la cubierta donde se afirman los cabos. El cabrestante es el motor que baja el ancla.",
+      ex: "Al amarrar al muelle, los cabos salen de las bitas del buque.",
+      src: "Amarre · bita" },
+    { t: "mc", q: "Según los apuntes, ¿cuáles son las amarras que se dan al muelle?",
+      o: ["Largo, través y spring", "Proa, popa y crujía", "Bita, cabo y grillete", "Ancla, cadena y cabrestante"],
+      exp: "En los apuntes figuran tres amarras: largo, través y spring.",
+      src: "Amarre · amarras" }
+  ],
+  n4: [
+    { t: "mc", q: "Según el dibujo de los apuntes, las partes de la hélice son…",
+      o: ["Capuchón, pala, núcleo, eje y bocina", "Roda, codaste, espejo, bulbo y quilla", "Ancla, cadena, grillete, bita y cabo", "Timón, cubierta, puntal, manga y eslora"],
+      exp: "Partes de la hélice: capuchón (en la punta), palas, núcleo, eje y bocina, por donde el eje entra al buque.",
+      src: "Hélice · partes" },
+    { t: "tf", q: "Según los apuntes, un buque «lastrado» es un buque cargado.", a: true,
+      exp: "En los apuntes: lastrado, cargado; en lastre (anotado «encastre»), vacío.",
+      src: "Lastrado y en lastre" },
+    { t: "mc", q: "Según los apuntes, ¿qué es la «vuelta encontrada»?",
+      o: ["Cuando los dos buques van por su banda de estribor", "Cuando un buque supera a otro que va en el mismo sentido", "Cuando un buque queda encajado en el fondo", "Cuando el buque se da vuelta por completo"],
+      exp: "Vuelta encontrada: cuando los dos buques van por su banda de estribor.",
+      src: "Vuelta encontrada" }
+  ],
+  n5: [
+    { t: "mc", q: "Según la hoja de la Ley de la Navegación, la propulsión puede ser…",
+      o: ["Mecánica (motor), eólica o a sangre", "Pública, privada o mixta del Estado", "Interna, fuera de borda o eléctrica", "Fluvial, marítima o lacustre"],
+      exp: "Propulsión: a motor (mecánica), eólica (a vela) y por tracción a sangre (a fuerza de personas, como el remo).",
+      src: "Ley de la Navegación 20.094 · apuntes" },
+    { t: "mc", q: "¿Qué sanciones del REGINAVE figuran en los apuntes?",
+      o: ["Apercibimiento, multa e inhabilitación", "Arresto, suspensión y destitución", "Multa, decomiso y clausura del puerto", "Advertencia, arresto y baja del registro"],
+      exp: "Sanciones: apercibimiento, multa e inhabilitación.",
+      src: "Ley de la Navegación 20.094 · apuntes" },
+    { t: "tf", q: "La dotación mínima de seguridad es la cantidad mínima de personas que tiene que haber a bordo.", a: true,
+      exp: "Dotación mínima de seguridad: la cantidad mínima de personas a bordo.",
+      src: "Ley de la Navegación 20.094 · apuntes" }
+  ],
+  n7: [
+    { t: "mc", q: "¿De qué color es la luz de tope?",
+      o: ["Blanca", "Roja", "Verde", "Amarilla"],
+      exp: "La luz de tope es blanca. Roja es babor y verde, estribor.",
+      src: "Luces" },
+    { t: "tf", q: "Un buque de 50 metros de eslora o más lleva dos luces de tope.", a: true,
+      exp: "Desde los 50 m de eslora el buque lleva dos luces de tope.",
+      src: "Luces" },
+    { t: "mc", q: "¿Cuál de estos NO figura entre los elementos de seguridad de los apuntes?",
+      o: ["Radar", "Matafuego", "Bengala", "Botiquín"],
+      exp: "Elementos: salvavidas, matafuego, linterna, bengala, botiquín, binoculares, remo, ancla de capa y GPS (con motor o vela).",
+      src: "Elementos de seguridad" },
+    { t: "tf", q: "El ancla de capa es un cono de tela.", a: true,
+      exp: "Ancla de capa: un cono de tela que frena el movimiento no deseado por viento o corriente.",
+      src: "Ancla de capa" },
+    { t: "tf", q: "En la navegación oceánica se exige sextante.", a: true,
+      exp: "Para la navegación oceánica se exige sextante.",
+      src: "Sextante" }
+  ]
+};
+UNITS_CN.forEach(u => (CN_EXTRA[u.id] || []).forEach(q => u.questions.push(q)));
+/* El tema de la hélice cambió: se suman las palabras nuevas a los temas de cada unidad. */
+UNITS_CN.find(u => u.id === "n2").topics += ", bita y amarras";
+UNITS_CN.find(u => u.id === "n4").topics += ", partes de la hélice, lastrado, vuelta encontrada";
+UNITS_CN.find(u => u.id === "n5").topics += ", propulsión, sanciones, dotación mínima";
+UNITS_CN.find(u => u.id === "n7").topics += ", luz de tope, ancla de capa";
+
+/* Repaso rápido: palabras que se usan en Prefectura (palabra ↔ significado). g = unidad, para elegir distractores parecidos. */
+const PALABRAS_CN = [
+  ["Proa", "Parte delantera del buque", "u1"], ["Popa", "Parte trasera del buque", "u1"],
+  ["Bandas", "Los costados del buque (no se dice «lados»)", "u1"],
+  ["Babor", "Banda izquierda, mirando hacia proa", "u1"], ["Estribor", "Banda derecha, mirando hacia proa", "u1"],
+  ["Amura", "Costado del buque cerca de la proa", "u1"], ["Aleta", "Costado del buque cerca de la popa", "u1"],
+  ["Través", "Costado del buque en la parte del medio", "u1"],
+  ["Línea de crujía", "Línea que divide el buque a la mitad, entre babor y estribor", "u1"],
+  ["Eslora", "Largo del buque", "u1"], ["Manga", "Ancho del buque", "u1"],
+  ["Puntal", "Alto del buque, desde la quilla hasta la cubierta", "u1"],
+  ["Calado", "Distancia desde la quilla hasta la línea de flotación", "u1"],
+  ["Francobordo", "Distancia desde la línea de flotación hasta la cubierta", "u1"],
+  ["Quilla", "El fondo del barco", "u1"], ["Roda", "Refuerzo de la quilla en la proa", "u1"],
+  ["Estanqueidad", "Sellado para que no ingrese el agua", "u1"],
+  ["Flotabilidad", "Capacidad de flotar: positiva, negativa o neutra", "u1"],
+  ["Estabilidad", "Capacidad de volver al estado de reposo inicial", "u1"],
+  ["Artefacto naval", "Construcción flotante sin propulsión ni gobierno", "u1"],
+  ["Disco de Plimsoll", "Marca de la línea de carga en el casco", "u1"],
+  ["Cuadernas", "Las costillas del buque", "u2"], ["Cubierta", "La parte de arriba del buque, el «piso»", "u2"],
+  ["Puente de navegación", "Lugar donde está el capitán", "u2"], ["Sala de máquinas", "Lugar donde está el motor", "u2"],
+  ["Rumbo (en el casco)", "Agujero en el casco", "u2"],
+  ["Acoderarse", "Colocarse al lado de otro buque", "u2"], ["Amarrar", "Sujetar el buque a un muelle", "u2"],
+  ["Fondear", "Echar el ancla donde no hay dónde amarrar", "u2"],
+  ["Bita", "Pieza de la cubierta donde se afirman los cabos", "u2"],
+  ["Cobrar", "Recoger un cabo", "u2"], ["Filar", "Soltar un cabo", "u2"],
+  ["Cabrestante", "Motor que baja el ancla", "u2"], ["Grilletes", "Medida de la cadena del ancla", "u2"],
+  ["Desplazamiento", "Peso del buque, en toneladas", "u2"], ["Arqueo", "Volumen del buque, en metros cúbicos", "u2"],
+  ["Porte", "Capacidad del buque destinada a la carga", "u2"],
   ["Obra viva", "Parte del casco en contacto con el agua", "u2"], ["Obra muerta", "Parte del casco fuera del agua", "u2"],
   ["Escora", "Buque recostado sobre su banda", "u3"], ["Vuelta campana", "Cuando el buque se da vuelta", "u3"],
-  ["Centro de carena", "Centro de la parte sumergida del casco", "u3"], ["Brazo adrizante", "Capacidad para volver a la posición de reposo", "u3"],
-  ["Milla náutica", "1852 metros", "u4"], ["Nudo", "Una milla náutica por hora", "u4"], ["Bocina", "Por donde el eje de la hélice entra al buque", "u4"],
-  ["Bow thruster", "Desplaza lateralmente el buque", "u4"], ["Barba de gato", "Fondeo con las dos anclas", "u4"], ["Varado", "Buque encajado en el fondo", "u4"],
-  ["Abordaje", "Colisión entre buques", "u4"], ["Alisión", "Un objeto en movimiento choca contra uno quieto", "u4"],
-  ["RIPA", "Reglamento Internacional para Prevenir Abordajes", "u4"], ["REY", "Registro Especial de Yates", "u5"], ["REJU", "Registro Jurisdiccional", "u5"],
-  ["SOLAS", "Seguridad de la vida humana en el mar", "u6"], ["EPIRB", "Radiobaliza que indica la posición de emergencia", "u6"],
-  ["Zafarrancho", "Ejercicio que define el rol de cada persona", "u6"], ["Caso SAR", "Búsqueda y rescate de personas", "u6"], ["Caso MAS", "Falla mecánica en el buque", "u6"], ["Centro SAR", "Armada Argentina", "u6"],
-  ["MARPOL", "Convenio sobre contaminación en aguas, aires y tierras", "u6"], ["STCW-95", "Normas de formación, certificación y guardia", "u6"],
-  ["Sextante", "Instrumento para determinar latitud y longitud", "u7"], ["Derrota", "Camino o trayectoria del buque", "u7"],
-  ["AIS", "Sistema de identificación automática", "u7"], ["SENADE", "Seguridad de la navegación deportiva", "u7"],
-  ["Ancla de capa", "Frena el movimiento no deseado por viento o corriente", "u7"], ["DAF", "Dispositivo de ayuda a la flotación", "u7"],
-  ["DPSN", "Dirección de Policía de Seguridad de la Navegación", "u7"], ["REGINAVE", "Régimen Nacional de la Navegación", "u7"],
-  ["IALA", "Regula formas y colores de boyas y balizas", "u7"], ["Alcanzar", "Un buque supera a otro", "u7"],
-  ["Franquear", "Dos buques se cruzan en direcciones opuestas", "u7"], ["Luz de alcance", "Luz para ver el buque desde atrás", "u7"]
+  ["Centro de carena", "Centro de la parte sumergida del casco", "u3"],
+  ["Brazo adrizante", "Lo que hace volver al buque a su posición de reposo", "u3"],
+  ["Asiento", "Cómo queda el buque de proa a popa: positivo o negativo", "u3"],
+  ["Milla náutica", "1852 metros", "u4"], ["Nudo", "Una milla náutica por hora", "u4"],
+  ["Bocina", "Por donde el eje de la hélice entra al buque", "u4"],
+  ["Dextrógira", "Hélice que gira hacia la derecha", "u4"], ["Levógira", "Hélice que gira hacia la izquierda", "u4"],
+  ["Bow thruster", "Desplaza el buque de costado", "u4"],
+  ["Lastrado", "Buque cargado", "u4"], ["En lastre", "Buque vacío", "u4"],
+  ["Barba de gato", "Fondeo con las dos anclas", "u4"], ["Varado", "Buque encajado en el fondo", "u4"],
+  ["Abordaje", "Colisión entre buques", "u4"], ["Alisión", "Algo en movimiento choca contra algo quieto", "u4"],
+  ["Vuelta encontrada", "Los dos buques van por su banda de estribor", "u4"],
+  ["Cabotaje", "Navegación entre varios puertos, por río o por mar", "u5"],
+  ["Navegación de altura", "La de buques que pasan varios días en el mar", "u5"],
+  ["Navegación lacustre", "La que se hace en un lago", "u5"], ["Navegación fluvial", "La que se hace en un río", "u5"],
+  ["Propulsión mixta", "Motor y vela", "u5"],
+  ["Convoy", "Conjunto de buques o artefactos navales remolcados", "u5"],
+  ["Tripulante", "Persona con idoneidad y certificado náutico para trabajar en el buque", "u5"],
+  ["Dotación mínima de seguridad", "Cantidad mínima de personas a bordo", "u5"],
+  ["Ordenanza", "La firman el Prefecto Nacional Naval y los directores", "u5"], ["Resolución", "La firman los ministerios", "u5"],
+  ["Zafarrancho", "Ejercicio que define el rol de cada persona ante una emergencia", "u6"],
+  ["Lancha hermética", "Lancha cerrada para abandonar el buque", "u6"],
+  ["Sextante", "Instrumento para determinar la latitud y la longitud", "u7"],
+  ["Derrota", "Camino o trayectoria del buque, del punto A al B", "u7"],
+  ["Almanaque náutico", "Dice cuándo sale el sol y dónde están las estrellas", "u7"],
+  ["Ancla de capa", "Cono de tela que frena el movimiento por viento o corriente", "u7"],
+  ["Alcanzar", "Un buque supera a otro que va en el mismo sentido", "u7"],
+  ["Franquear", "Dos buques se cruzan en direcciones opuestas", "u7"],
+  ["Luz de tope", "Luz blanca; desde los 50 m de eslora van dos", "u7"],
+  ["Luz de alcance", "Luz para ver el buque desde atrás", "u7"],
+  ["Muerto", "Peso en el fondo que mantiene la boya en su lugar", "u7"]
 ].map(([a, b, g]) => ({ a, b, g, exp: `${a}: ${b}.` }));
+
+const SIGLAS_CN = [
+  ["SOLAS", "Seguridad de la vida humana en el mar", "c"], ["MARPOL", "Convenio sobre contaminación del mar", "c"],
+  ["STCW-95", "Normas de formación, certificación y guardia", "c"],
+  ["EPIRB", "Radiobaliza que indica la posición de emergencia", "e"], ["AIS", "Sistema de identificación automática", "e"],
+  ["DAF", "Dispositivo de ayuda a la flotación", "e"],
+  ["Caso SAR", "Búsqueda y rescate de personas", "s"], ["Caso MAS", "Falla mecánica en el buque", "s"],
+  ["RIPA", "Reglamento Internacional para Prevenir Abordajes", "r"], ["REGINAVE", "Régimen Nacional de la Navegación", "r"],
+  ["REY", "Registro Especial de Yates", "r"], ["REJU", "Registro Jurisdiccional", "r"],
+  ["DPSN", "Dirección de Policía de Seguridad de la Navegación", "o"], ["PNN", "Prefecto Nacional Naval", "o"],
+  ["SENADE", "Seguridad de la navegación deportiva", "o"], ["IALA", "Regula las formas y los colores de boyas y balizas", "o"]
+].map(([a, b, g]) => ({ a, b, g, exp: `${a}: ${b}.` }));
+
+/* Dibujos del buque para repasar (identificar partes). */
+const CN_FIGQ = [
+  { key: "cnPerfil", u: "n1", title: "Partes del buque", sub: "Vista de costado", q: "Identificá las partes del buque visto de costado.",
+    exp: "La roda es el refuerzo de la quilla en la proa y abajo está el bulbo. En la popa están el espejo y el codaste; la pala del timón va después de la hélice. Arriba de la cubierta, la superestructura y el puente de navegación, donde está el capitán." },
+  { key: "cnPlanta", u: "n1", title: "El buque desde arriba", sub: "Bandas y costados", q: "Identificá las partes del buque visto desde arriba (la proa es la punta).",
+    exp: "Mirando hacia proa, babor queda a la izquierda y estribor a la derecha. Cerca de la proa están las amuras, en el medio el través y cerca de la popa las aletas. La línea de crujía divide babor de estribor." },
+  { key: "cnDim", u: "n1", title: "Medidas y línea de flotación", sub: "Eslora, manga, puntal, calado…", q: "Identificá las medidas y las marcas del buque.",
+    exp: "Eslora: largo. Manga: ancho. Puntal: de la quilla a la cubierta. Calado: de la quilla a la línea de flotación (obra viva). Francobordo: de la flotación a la cubierta (obra muerta). En el casco van el disco de Plimsoll (línea de carga) y la escala de calados." },
+  { key: "cnEstab", u: "n3", title: "Estabilidad transversal", sub: "G, C, M, K y brazo adrizante", q: "El buque está escorado: identificá los puntos y elementos de la estabilidad transversal.",
+    exp: "G: centro de gravedad. C: centro de carena (parte sumergida). M: metacentro. K: quilla. El ángulo de escora es lo que se inclina el buque y el brazo adrizante es lo que lo hace volver a su posición." },
+  { key: "cnHelice", u: "n4", title: "Hélice y timón", sub: "Partes de la hélice", q: "Identificá las partes de la hélice y el timón.",
+    exp: "La hélice tiene capuchón, palas y núcleo; el eje entra al buque por la bocina. La pala del timón va después de la hélice." },
+  { key: "cnTipos", u: "n4", title: "Tipos de timón y de hélice", sub: "Ordinario o compensado · dextrógira o levógira", q: "Identificá el tipo de timón y el sentido de giro de cada hélice.",
+    exp: "Timón ordinario: toda la pala queda detrás del eje. Compensado: una parte de la pala queda delante del eje. Hélice dextrógira: gira hacia la derecha; levógira: hacia la izquierda." },
+  { key: "cnFondeo", u: "n2", title: "Fondeo y amarre", sub: "Ancla, cadena, bita…", q: "Identificá los elementos del fondeo y del amarre.",
+    exp: "Partes del ancla: ancla, cadena y cabrestante, el motor que baja el ancla. Para amarrar, los cabos se afirman en la bita y van al muelle." },
+  { key: "cnLuces", u: "n7", title: "Luces de navegación", sub: "Buque de noche, visto desde arriba", q: "De noche: identificá cada luz del buque (la proa es la punta).",
+    exp: "Luz roja: babor. Luz verde: estribor. Luz de tope: blanca, adelante (desde los 50 m de eslora van dos). Luz de alcance: atrás, para ver el buque desde popa." }
+].map(f => ({ ...f, subj: "cn", lq: { t: "label", fig: f.key, q: f.q, exp: f.exp, src: f.title, uid: f.u, key: "fig-" + f.key } }));
+
+/* ---------- Conocimientos Náuticos: dibujos del buque (repaso rápido) ----------
+   Dibujos propios hechos a partir de los esquemas de los apuntes de clase. */
+const CN_C = { agua: "#d6eaf4", flot: "#2f7fb5", muerta: "#2c3e50", viva: "#b23a2e", sup: "#f3f2ed", tinta: "#1c2521", cub: "#d8cdb3", esco: "#6f7f5e" };
+/* Casco con obra muerta (arriba) y obra viva (abajo de la flotación). */
+function cnHull(id, d, wl, w) {
+  return `<defs><clipPath id="${id}"><rect x="-50" y="${wl}" width="${w + 100}" height="800"/></clipPath></defs>
+    <path d="${d}" fill="${CN_C.muerta}"/><path d="${d}" fill="${CN_C.viva}" clip-path="url(#${id})"/>
+    <path d="${d}" fill="none" stroke="${CN_C.tinta}" stroke-width="2.2" stroke-linejoin="round"/>`;
+}
+function cnArrow(x1, y1, x2, y2, id) {
+  return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${CN_C.tinta}" stroke-width="2.2" marker-start="url(#${id})" marker-end="url(#${id})"/>`;
+}
+const cnArrowDef = id => `<marker id="${id}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="${CN_C.tinta}"/></marker>`;
+function cnWindows(x1, x2, y, h, step) { let s = ""; for (let x = x1; x <= x2; x += step) s += `<rect x="${x}" y="${y}" width="${step * .55}" height="${h}" rx="1.5" fill="#33475a"/>`; return s; }
+
+/* 1. Perfil del buque */
+function cnPerfilArt() {
+  const hull = "M112,196 L690,196 Q770,192 816,158 C808,200 792,240 784,282 C802,284 824,296 822,312 C820,328 797,335 765,334 L232,334 L232,292 C205,284 165,272 130,268 Z";
+  let rail = `<line x1="118" y1="184" x2="700" y2="184" stroke="#56626b" stroke-width="2"/>`;
+  for (let x = 120; x <= 700; x += 24) rail += `<line x1="${x}" y1="184" x2="${x}" y2="196" stroke="#56626b" stroke-width="1.6"/>`;
+  return `<rect x="0" y="262" width="900" height="200" fill="${CN_C.agua}"/>
+    ${rail}
+    ${[400, 480, 560].map(x => `<rect x="${x}" y="176" width="64" height="20" rx="2" fill="${CN_C.esco}" stroke="${CN_C.tinta}" stroke-width="1.5"/>`).join("")}
+    <line x1="700" y1="196" x2="700" y2="112" stroke="${CN_C.tinta}" stroke-width="4"/><line x1="684" y1="132" x2="716" y2="132" stroke="${CN_C.tinta}" stroke-width="3"/>
+    <rect x="160" y="120" width="172" height="76" fill="${CN_C.sup}" stroke="${CN_C.tinta}" stroke-width="2"/>
+    ${[185, 215, 245, 275, 305].map(x => `<circle cx="${x}" cy="150" r="5" fill="#33475a"/>`).join("")}
+    <rect x="166" y="70" width="26" height="50" fill="#c8372d" stroke="${CN_C.tinta}" stroke-width="2"/><rect x="166" y="70" width="26" height="10" fill="${CN_C.tinta}"/>
+    <rect x="204" y="86" width="128" height="34" fill="${CN_C.sup}" stroke="${CN_C.tinta}" stroke-width="2"/>
+    ${cnWindows(212, 320, 94, 12, 18)}
+    ${cnHull("cnpf", hull, 262, 900)}
+    <line x1="232" y1="290" x2="232" y2="334" stroke="${CN_C.tinta}" stroke-width="5"/>
+    <line x1="213" y1="306" x2="232" y2="306" stroke="#3a3f44" stroke-width="5"/>
+    <ellipse cx="213" cy="291" rx="6" ry="14" fill="#c9a24a" stroke="${CN_C.tinta}" stroke-width="1.5"/>
+    <ellipse cx="213" cy="321" rx="6" ry="14" fill="#c9a24a" stroke="${CN_C.tinta}" stroke-width="1.5"/>
+    <circle cx="213" cy="306" r="5.5" fill="#a8842f" stroke="${CN_C.tinta}" stroke-width="1.5"/>
+    <line x1="176" y1="270" x2="176" y2="280" stroke="${CN_C.tinta}" stroke-width="4"/>
+    <path d="M191,278 L193,328 L161,328 Q155,303 161,278 Z" fill="#7b8a93" stroke="${CN_C.tinta}" stroke-width="2"/>
+    <line x1="0" y1="262" x2="900" y2="262" stroke="${CN_C.flot}" stroke-width="2.4"/>`;
+}
+
+/* 2. Dimensiones, flotación y marcas del casco */
+function cnDimArt() {
+  const hull = "M60,170 L470,170 Q520,168 555,144 C548,200 540,250 526,320 L96,320 L96,292 C84,280 70,266 64,250 Z";
+  const sec = "M680,170 L680,275 Q680,320 725,320 L855,320 Q900,320 900,275 L900,170 Z";
+  let esc = "";
+  for (let y = 300; y >= 180; y -= 20) esc += `<line x1="500" y1="${y}" x2="${(320 - y) % 40 === 0 ? 516 : 509}" y2="${y}" stroke="#fff" stroke-width="2"/>`;
+  [2, 4, 6].forEach(m => esc += `<text x="520" y="${320 - m * 20 + 5}" font-family="IBM Plex Mono, monospace" font-size="14" font-weight="700" fill="#fff">${m}</text>`);
+  const ext = (x1, y1, x2, y2) => `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#56625b" stroke-width="1.3" stroke-dasharray="5 4"/>`;
+  return `<defs>${cnArrowDef("cnda")}</defs>
+    <rect x="0" y="250" width="1000" height="230" fill="${CN_C.agua}"/>
+    <rect x="92" y="120" width="104" height="50" fill="${CN_C.sup}" stroke="${CN_C.tinta}" stroke-width="2"/>
+    <rect x="106" y="96" width="80" height="24" fill="${CN_C.sup}" stroke="${CN_C.tinta}" stroke-width="2"/>${cnWindows(112, 176, 102, 9, 14)}
+    ${cnHull("cndh", hull, 250, 600)}
+    ${cnHull("cnds", sec, 250, 1000)}
+    <rect x="784" y="320" width="12" height="9" fill="${CN_C.tinta}"/>
+    <g stroke="#fff" stroke-width="2.4" fill="none"><circle cx="330" cy="230" r="13"/><line x1="306" y1="230" x2="354" y2="230"/><line x1="362" y1="214" x2="362" y2="246"/><line x1="362" y1="216" x2="386" y2="216"/></g>
+    ${esc}
+    ${ext(60, 170, 60, 60)}${ext(555, 144, 555, 60)}${cnArrow(62, 72, 553, 72, "cnda")}
+    ${ext(680, 170, 680, 128)}${ext(900, 170, 900, 128)}${cnArrow(682, 140, 898, 140, "cnda")}
+    ${ext(680, 170, 636, 170)}${ext(725, 329, 636, 329)}${cnArrow(650, 172, 650, 327, "cnda")}
+    ${ext(900, 170, 946, 170)}${ext(855, 320, 946, 320)}${ext(900, 250, 946, 250)}
+    ${cnArrow(932, 172, 932, 248, "cnda")}${cnArrow(932, 252, 932, 318, "cnda")}
+    <line x1="0" y1="250" x2="1000" y2="250" stroke="${CN_C.flot}" stroke-width="2.4"/>
+    <text x="300" y="460" font-family="IBM Plex Mono, monospace" font-size="13" fill="#56625b" text-anchor="middle">VISTA DE COSTADO</text>
+    <text x="790" y="460" font-family="IBM Plex Mono, monospace" font-size="13" fill="#56625b" text-anchor="middle">CORTE TRANSVERSAL</text>`;
+}
+
+/* 3. Vista desde arriba */
+function cnPlantaArt() {
+  const hull = "M120,130 L560,130 C700,130 790,175 840,220 C790,265 700,310 560,310 L120,310 Q96,310 96,286 L96,154 Q96,130 120,130 Z";
+  return `<rect x="0" y="0" width="900" height="440" fill="${CN_C.agua}"/>
+    <path d="${hull}" fill="${CN_C.cub}" stroke="${CN_C.muerta}" stroke-width="7" stroke-linejoin="round"/>
+    <rect x="150" y="160" width="140" height="120" rx="4" fill="${CN_C.sup}" stroke="${CN_C.tinta}" stroke-width="2"/>
+    <rect x="166" y="178" width="34" height="84" rx="3" fill="#c8372d" stroke="${CN_C.tinta}" stroke-width="1.5" opacity=".9"/>
+    ${[330, 395, 495, 560].map(x => `<rect x="${x}" y="172" width="50" height="96" rx="2" fill="${CN_C.esco}" stroke="${CN_C.tinta}" stroke-width="1.5"/>`).join("")}
+    <circle cx="700" cy="220" r="7" fill="${CN_C.tinta}"/>
+    <line x1="60" y1="220" x2="870" y2="220" stroke="${CN_C.tinta}" stroke-width="2" stroke-dasharray="14 5 3 5"/>
+    <line x1="470" y1="96" x2="470" y2="344" stroke="${CN_C.tinta}" stroke-width="2" stroke-dasharray="8 5"/>`;
+}
+
+/* 4. Estabilidad transversal (buque escorado) */
+const CN_EST = (() => {
+  const O = [340, 250], th = 20 * Math.PI / 180, s = Math.sin(th), c = Math.cos(th);
+  const R = (x, y) => [+(O[0] + x * c - y * s).toFixed(1), +(O[1] + x * s + y * c).toFixed(1)];
+  const K = R(0, 128), G = R(0, -8), Cu = R(0, 62), C = [+(Cu[0] + 72).toFixed(1), +(Cu[1] - 12).toFixed(1)];
+  const t = (O[0] - C[0]) / s, M = [C[0], +(O[1] + t * c).toFixed(1)];
+  const pts = [[-160, -100], [-160, 60], [-160, 128, -100, 128], [100, 128], [160, 128, 160, 60], [160, -100]];
+  const q = (x, y) => R(x, y).join(",");
+  const d = `M${q(-160, -100)} L${q(-160, 64)} Q${q(-160, 128)} ${q(-96, 128)} L${q(96, 128)} Q${q(160, 128)} ${q(160, 64)} L${q(160, -100)} Z`;
+  const AR = 80, am = Math.PI / 2 + th / 2;
+  return { O, R, K, G, C, M, Z: [C[0], G[1]], top: R(0, -175), bot: R(0, 150), d, th, pts, AR, A: [+(M[0] + (AR - 12) * Math.cos(am)).toFixed(1), +(M[1] + (AR - 12) * Math.sin(am)).toFixed(1)] };
+})();
+function cnEstabArt() {
+  const E = CN_EST, [Mx, My] = E.M;
+  const r = E.AR, a0 = Math.PI / 2, a1 = Math.PI / 2 + E.th; /* arco entre la vertical (hacia abajo) y la crujía (hacia K) */
+  const arc = `M${(Mx + r * Math.cos(a0)).toFixed(1)},${(My + r * Math.sin(a0)).toFixed(1)} A${r},${r} 0 0 1 ${(Mx + r * Math.cos(a1)).toFixed(1)},${(My + r * Math.sin(a1)).toFixed(1)}`;
+  const pt = (p, l, dx, dy) => `<circle cx="${p[0]}" cy="${p[1]}" r="6" fill="${CN_C.tinta}" stroke="#fff" stroke-width="2"/><text x="${p[0] + dx}" y="${p[1] + dy}" font-family="Barlow, system-ui, sans-serif" font-size="22" font-weight="800" fill="${CN_C.tinta}" stroke="#fff" stroke-width="4" paint-order="stroke">${l}</text>`;
+  return `<rect x="0" y="250" width="720" height="270" fill="${CN_C.agua}"/>
+    ${cnHull("cneh", E.d, 250, 720)}
+    <path d="${E.d}" fill="#fff" opacity=".18"/>
+    <line x1="${E.top[0]}" y1="${E.top[1]}" x2="${E.bot[0]}" y2="${E.bot[1]}" stroke="#fff" stroke-width="5"/>
+    <line x1="${E.top[0]}" y1="${E.top[1]}" x2="${E.bot[0]}" y2="${E.bot[1]}" stroke="${CN_C.tinta}" stroke-width="2" stroke-dasharray="12 5"/>
+    <line x1="${Mx}" y1="${My - 60}" x2="${Mx}" y2="${E.C[1] + 70}" stroke="#fff" stroke-width="5"/>
+    <line x1="${Mx}" y1="${My - 60}" x2="${Mx}" y2="${E.C[1] + 70}" stroke="#1f5f8f" stroke-width="2.2"/>
+    <path d="M${Mx},${My} L${arc.slice(1)} Z" fill="#c8372d" opacity=".22"/><path d="${arc}" fill="none" stroke="#c8372d" stroke-width="3.5"/>
+    <line x1="${E.G[0]}" y1="${E.G[1]}" x2="${E.Z[0]}" y2="${E.Z[1]}" stroke="#fff" stroke-width="9" stroke-linecap="round"/>
+    <line x1="${E.G[0]}" y1="${E.G[1]}" x2="${E.Z[0]}" y2="${E.Z[1]}" stroke="#e07b1f" stroke-width="6" stroke-linecap="round"/>
+    <line x1="0" y1="250" x2="720" y2="250" stroke="${CN_C.flot}" stroke-width="2.4"/>
+    ${pt(E.M, "M", -30, -6)}${pt(E.G, "G", -30, 8)}${pt(E.C, "C", 12, 24)}${pt(E.K, "K", -30, 10)}`;
+}
+
+/* 5. Hélice y timón */
+function cnHeliceArt() {
+  const hull = "M60,40 L860,40 L860,330 L480,330 L480,176 C456,126 382,104 300,98 L60,92 Z";
+  const blade = (y1, y2) => `<path d="M318,${y1} C338,${(y1 + y2) / 2} 338,${(y1 + y2) / 2} 318,${y2} C298,${(y1 + y2) / 2} 298,${(y1 + y2) / 2} 318,${y1} Z" fill="#d4ae55" stroke="${CN_C.tinta}" stroke-width="2"/>`;
+  return `<rect x="0" y="110" width="860" height="330" fill="${CN_C.agua}"/>
+    ${cnHull("cnhh", hull, 110, 860)}
+    <rect x="455" y="257" width="27" height="26" rx="3" fill="#8b949b" stroke="${CN_C.tinta}" stroke-width="2"/>
+    <rect x="330" y="264" width="126" height="12" fill="#5d666d" stroke="${CN_C.tinta}" stroke-width="1.6"/>
+    ${blade(165, 262)}${blade(278, 380)}
+    <rect x="300" y="252" width="34" height="36" rx="8" fill="#b8913b" stroke="${CN_C.tinta}" stroke-width="2"/>
+    <path d="M301,254 L272,270 L301,286 Z" fill="#9c7a2e" stroke="${CN_C.tinta}" stroke-width="2" stroke-linejoin="round"/>
+    <line x1="166" y1="94" x2="166" y2="150" stroke="${CN_C.tinta}" stroke-width="6"/>
+    <path d="M206,150 L212,360 L128,360 Q112,255 126,150 Z" fill="#7b8a93" stroke="${CN_C.tinta}" stroke-width="2.2"/>
+    <line x1="0" y1="110" x2="860" y2="110" stroke="${CN_C.flot}" stroke-width="2.4"/>
+    <text x="846" y="28" font-family="IBM Plex Mono, monospace" font-size="13" fill="#56625b" text-anchor="end">POPA DEL BUQUE · DE COSTADO</text>`;
+}
+
+/* 6. Fondeo y amarre */
+function cnFondeoArt() {
+  const hull = "M206,130 L740,130 Q792,128 822,98 C814,160 792,228 764,290 L206,290 Z";
+  /* cadena: eslabones a lo largo de una curva desde el escobén hasta el ancla */
+  const P = (t) => { const a = [800, 152], b = [818, 330], e = [872, 400]; const u = 1 - t; return [u * u * a[0] + 2 * u * t * b[0] + t * t * e[0], u * u * a[1] + 2 * u * t * b[1] + t * t * e[1]]; };
+  let links = "";
+  for (let i = 0; i < 30; i++) {
+    const t = i / 30, p = P(t), p2 = P(t + .01), ang = Math.atan2(p2[1] - p[1], p2[0] - p[0]) * 180 / Math.PI;
+    links += `<ellipse cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" rx="5.5" ry="3" transform="rotate(${ang.toFixed(0)} ${p[0].toFixed(1)} ${p[1].toFixed(1)})" fill="none" stroke="#3b4248" stroke-width="2.4"/>`;
+  }
+  for (let x = 690; x < 800; x += 9) links += `<ellipse cx="${x}" cy="${(126 - (x - 690) * 0 ).toFixed(0)}" rx="4.5" ry="2.6" fill="none" stroke="#3b4248" stroke-width="2.2"/>`;
+  const ancla = `<g transform="translate(872,398)" stroke="${CN_C.tinta}" stroke-width="3" fill="#59626a" stroke-linejoin="round">
+      <circle cx="0" cy="0" r="7" fill="none" stroke-width="3.5"/>
+      <rect x="-3.5" y="6" width="7" height="58"/>
+      <rect x="-26" y="13" width="52" height="6" rx="3"/>
+      <path d="M-30,48 Q-28,70 0,70 Q28,70 30,48" fill="none" stroke-width="6"/>
+      <path d="M-30,48 L-38,38 L-24,42 Z M30,48 L38,38 L24,42 Z" stroke-width="2.5"/></g>`;
+  return `<rect x="0" y="200" width="960" height="280" fill="${CN_C.agua}"/>
+    <path d="M0,472 Q120,462 240,470 T480,468 T720,470 T960,466 L960,480 L0,480 Z" fill="#e2d1a3"/>
+    <rect x="0" y="150" width="140" height="330" fill="#b9b9b1" stroke="#6b6b64" stroke-width="2"/>
+    <rect x="0" y="150" width="140" height="12" fill="#9a9a92"/>
+    <rect x="96" y="132" width="18" height="18" rx="3" fill="#3b4248"/><rect x="92" y="128" width="26" height="7" rx="3" fill="#3b4248"/>
+    <rect x="326" y="72" width="120" height="58" fill="${CN_C.sup}" stroke="${CN_C.tinta}" stroke-width="2"/>${cnWindows(334, 436, 84, 10, 16)}
+    ${cnHull("cnfh", hull, 200, 960)}
+    <path d="M262,116 Q190,175 106,138" fill="none" stroke="#b07a2a" stroke-width="4.5"/>
+    <rect x="250" y="110" width="8" height="20" fill="#3b4248"/><rect x="266" y="110" width="8" height="20" fill="#3b4248"/><rect x="246" y="106" width="32" height="6" rx="3" fill="#3b4248"/>
+    <rect x="660" y="112" width="20" height="18" fill="#59626a" stroke="${CN_C.tinta}" stroke-width="1.6"/>
+    <circle cx="670" cy="110" r="16" fill="#7b858d" stroke="${CN_C.tinta}" stroke-width="2"/><circle cx="670" cy="110" r="6" fill="#3b4248"/>
+    ${links}${ancla}
+    <line x1="0" y1="200" x2="960" y2="200" stroke="${CN_C.flot}" stroke-width="2.4"/>`;
+}
+
+/* 7. Luces de navegación (de noche, vista desde arriba) */
+function cnLucesArt() {
+  const hull = "M230,180 L520,180 C580,180 620,200 640,220 C620,240 580,260 520,260 L230,260 Q216,260 216,246 L216,194 Q216,180 230,180 Z";
+  const sector = (cx, cy, r, a1, a2, fill) => {
+    const p = a => [(cx + r * Math.cos(a * Math.PI / 180)).toFixed(1), (cy + r * Math.sin(a * Math.PI / 180)).toFixed(1)];
+    const [x1, y1] = p(a1), [x2, y2] = p(a2), big = ((a2 - a1 + 360) % 360) > 180 ? 1 : 0;
+    return `<path d="M${cx},${cy} L${x1},${y1} A${r},${r} 0 ${big} 1 ${x2},${y2} Z" fill="${fill}"/>`;
+  };
+  const luz = (x, y, c) => `<circle cx="${x}" cy="${y}" r="15" fill="${c}" opacity=".35"/><circle cx="${x}" cy="${y}" r="7" fill="${c}" stroke="#0b1524" stroke-width="1.5"/>`;
+  return `<rect x="0" y="0" width="820" height="440" fill="#13263f"/>
+    ${sector(520, 220, 240, -112.5, 112.5, "rgba(255,255,255,.07)")}
+    ${sector(222, 220, 190, 112.5, 247.5, "rgba(255,255,255,.12)")}
+    ${sector(470, 182, 210, -112.5, 0, "rgba(235,64,52,.32)")}
+    ${sector(470, 258, 210, 0, 112.5, "rgba(46,204,113,.30)")}
+    <path d="${hull}" fill="#4a5a6a" stroke="#8a9aa8" stroke-width="3"/>
+    <rect x="250" y="196" width="80" height="48" rx="3" fill="#6d7d8c"/>
+    ${luz(470, 182, "#ff4b3e")}${luz(470, 258, "#35d07f")}${luz(520, 220, "#ffffff")}${luz(222, 220, "#ffffff")}`;
+}
+
+/* 8. Tipos de timón y de hélice */
+function cnTiposArt() {
+  const panel = x => `<rect x="${x + 8}" y="10" width="204" height="320" rx="10" fill="#f6f7f4" stroke="#cdd3cf" stroke-width="1.5"/>`;
+  const cap = (x, t) => `<text x="${x + 110}" y="36" font-family="IBM Plex Mono, monospace" font-size="12" fill="#56625b" text-anchor="middle">${t}</text>`;
+  const timon = (x, sx, bx1, bx2) => `
+    <rect x="${x + 30}" y="52" width="160" height="22" fill="${CN_C.muerta}"/>
+    <line x1="${sx}" y1="74" x2="${sx}" y2="300" stroke="${CN_C.tinta}" stroke-width="2" stroke-dasharray="8 5"/>
+    <path d="M${bx1},96 L${bx2},96 L${bx2},282 L${bx1},282 Q${bx1 - 8},190 ${bx1},96 Z" fill="#7b8a93" stroke="${CN_C.tinta}" stroke-width="2.2"/>
+    <line x1="${sx}" y1="74" x2="${sx}" y2="110" stroke="${CN_C.tinta}" stroke-width="6"/><line x1="${sx}" y1="96" x2="${sx}" y2="300" stroke="#c8372d" stroke-width="2.4" stroke-dasharray="9 5"/><circle cx="${sx}" cy="110" r="5" fill="${CN_C.tinta}"/><circle cx="${sx}" cy="270" r="5" fill="${CN_C.tinta}"/>
+    <text x="${sx + 6}" y="92" font-family="IBM Plex Mono, monospace" font-size="11" fill="#c8372d">EJE</text>
+    <text x="${x + 186}" y="318" font-family="IBM Plex Mono, monospace" font-size="12" fill="#56625b" text-anchor="end">PROA →</text>`;
+  const helice = (x, dir) => {
+    const cx = x + 110, cy = 175;
+    let b = "";
+    for (let i = 0; i < 3; i++) b += `<ellipse cx="${cx}" cy="${cy - 46}" rx="18" ry="44" transform="rotate(${i * 120 + 12} ${cx} ${cy})" fill="#d4ae55" stroke="${CN_C.tinta}" stroke-width="2"/>`;
+    const r = 86, a1 = dir > 0 ? -150 : -30, a2 = dir > 0 ? -30 : -150;
+    const p = a => [(cx + r * Math.cos(a * Math.PI / 180)).toFixed(1), (cy + r * Math.sin(a * Math.PI / 180)).toFixed(1)];
+    const [x1, y1] = p(a1), [x2, y2] = p(a2);
+    return `${b}<circle cx="${cx}" cy="${cy}" r="14" fill="#b8913b" stroke="${CN_C.tinta}" stroke-width="2"/>
+      <path d="M${x1},${y1} A${r},${r} 0 0 ${dir > 0 ? 1 : 0} ${x2},${y2}" fill="none" stroke="#c8372d" stroke-width="4" marker-end="url(#cnta)"/>
+      <text x="${cx}" y="318" font-family="IBM Plex Mono, monospace" font-size="12" fill="#56625b" text-anchor="middle">VISTA DESDE POPA</text>`;
+  };
+  return `<defs><marker id="cnta" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#c8372d"/></marker></defs>
+    ${panel(0)}${panel(220)}${panel(440)}${panel(660)}
+    ${cap(0, "TIMÓN")}${cap(220, "TIMÓN")}${cap(440, "HÉLICE")}${cap(660, "HÉLICE")}
+    ${timon(0, 170, 70, 170)}${timon(220, 350, 290, 395)}${helice(440, 1)}${helice(660, -1)}`;
+}
+
+FIGS.cnPerfil = {
+  w: 900, h: 440, art: cnPerfilArt, typeLabel: "Identificar partes",
+  extra: ["Amura", "Aleta", "Bita", "Bocina"],
+  targets: [
+    { n: 1, name: "Puente de navegación", tx: 300, ty: 100, lx: 370, ly: 34, alts: ["Puente"] },
+    { n: 2, name: "Superestructura", tx: 250, ty: 172, lx: 92, ly: 60 },
+    { n: 3, name: "Cubierta superior", tx: 360, ty: 196, lx: 470, ly: 110, alts: ["Cubierta"] },
+    { n: 4, name: "Roda", tx: 803, ty: 215, lx: 868, ly: 190 },
+    { n: 5, name: "Bulbo", tx: 818, ty: 312, lx: 868, ly: 380 },
+    { n: 6, name: "Quilla", tx: 500, ty: 334, lx: 500, ly: 410 },
+    { n: 7, name: "Casco", tx: 600, ty: 232, lx: 640, ly: 410 },
+    { n: 8, name: "Codaste", tx: 232, ty: 322, lx: 300, ly: 410 },
+    { n: 9, name: "Hélice", tx: 213, ty: 330, lx: 205, ly: 410 },
+    { n: 10, name: "Timón", tx: 168, ty: 312, lx: 100, ly: 405 },
+    { n: 11, name: "Espejo", tx: 121, ty: 232, lx: 36, ly: 232 }
+  ]
+};
+FIGS.cnDim = {
+  w: 1000, h: 480, art: cnDimArt, typeLabel: "Identificar medidas",
+  extra: ["Arqueo", "Desplazamiento", "Línea de crujía"],
+  targets: [
+    { n: 1, name: "Eslora", tx: 300, ty: 72, lx: 300, ly: 26 },
+    { n: 2, name: "Manga", tx: 790, ty: 140, lx: 790, ly: 92 },
+    { n: 3, name: "Puntal", tx: 650, ty: 290, lx: 610, ly: 410 },
+    { n: 4, name: "Calado", tx: 932, ty: 285, lx: 975, ly: 360 },
+    { n: 5, name: "Francobordo", tx: 932, ty: 210, lx: 975, ly: 140, alts: ["Franco bordo"] },
+    { n: 6, name: "Línea de flotación", tx: 30, ty: 250, lx: 30, ly: 330, alts: ["Flotación", "Linea de agua"] },
+    { n: 7, name: "Obra viva", tx: 300, ty: 296, lx: 300, ly: 412 },
+    { n: 8, name: "Obra muerta", tx: 236, ty: 210, lx: 252, ly: 122 },
+    { n: 9, name: "Disco de Plimsoll", tx: 330, ty: 230, lx: 400, ly: 122, alts: ["Plimsoll", "Disco Plimsoll"] },
+    { n: 10, name: "Escala de calados", tx: 506, ty: 230, lx: 486, ly: 122, alts: ["Escala de calado"] }
+  ]
+};
+FIGS.cnPlanta = {
+  w: 900, h: 440, art: cnPlantaArt, typeLabel: "Identificar partes",
+  extra: ["Roda", "Espejo", "Manga"],
+  targets: [
+    { n: 1, name: "Proa", tx: 840, ty: 220, lx: 870, ly: 120 },
+    { n: 2, name: "Popa", tx: 96, ty: 180, lx: 40, ly: 110 },
+    { n: 3, name: "Babor", tx: 380, ty: 130, lx: 380, ly: 46 },
+    { n: 4, name: "Estribor", tx: 380, ty: 310, lx: 380, ly: 400 },
+    { n: 5, name: "Amura", tx: 734, ty: 158, lx: 770, ly: 60 },
+    { n: 6, name: "Aleta", tx: 150, ty: 310, lx: 150, ly: 400 },
+    { n: 7, name: "Través", tx: 470, ty: 330, lx: 540, ly: 400, alts: ["Traves"] },
+    { n: 8, name: "Línea de crujía", tx: 640, ty: 220, lx: 600, ly: 46, alts: ["Crujía", "Crujia"] }
+  ]
+};
+FIGS.cnEstab = {
+  w: 720, h: 520, art: cnEstabArt, typeLabel: "Identificar puntos",
+  extra: ["Asiento", "Puntal", "Calado"],
+  targets: [
+    { n: 1, name: "Metacentro", tx: CN_EST.M[0], ty: CN_EST.M[1], lx: 560, ly: 70, alts: ["M"] },
+    { n: 2, name: "Centro de gravedad", tx: CN_EST.G[0], ty: CN_EST.G[1], lx: 150, ly: 160, alts: ["G", "Gravedad"] },
+    { n: 3, name: "Centro de carena", tx: CN_EST.C[0], ty: CN_EST.C[1], lx: 600, ly: 360, alts: ["C", "Carena"] },
+    { n: 4, name: "Quilla", tx: CN_EST.K[0], ty: CN_EST.K[1], lx: 160, ly: 470, alts: ["K"] },
+    { n: 5, name: "Brazo adrizante", tx: +((CN_EST.G[0] + CN_EST.Z[0]) / 2).toFixed(1), ty: CN_EST.G[1], lx: 620, ly: 200, alts: ["Brazo de adrizamiento", "GZ"] },
+    { n: 6, name: "Ángulo de escora", tx: CN_EST.A[0], ty: CN_EST.A[1], lx: 600, ly: 290, alts: ["Angulo de escora", "Escora"] }
+  ]
+};
+FIGS.cnHelice = {
+  w: 860, h: 440, art: cnHeliceArt, typeLabel: "Identificar partes",
+  extra: ["Codaste", "Bow thruster", "Cabrestante"],
+  targets: [
+    { n: 1, name: "Capuchón", tx: 282, ty: 270, lx: 236, ly: 410, alts: ["Capucheta", "Capuchon"] },
+    { n: 2, name: "Pala", tx: 318, ty: 200, lx: 410, ly: 160, alts: ["Pala de la hélice", "Aspa"] },
+    { n: 3, name: "Núcleo", tx: 324, ty: 286, lx: 340, ly: 410, alts: ["Nucleo", "Cubo"] },
+    { n: 4, name: "Eje", tx: 400, ty: 276, lx: 430, ly: 410, alts: ["Eje de la hélice"] },
+    { n: 5, name: "Bocina", tx: 470, ty: 283, lx: 560, ly: 410 },
+    { n: 6, name: "Timón", tx: 150, ty: 300, lx: 60, ly: 410, alts: ["Pala del timón", "Timon"] }
+  ]
+};
+FIGS.cnFondeo = {
+  w: 960, h: 480, art: cnFondeoArt, typeLabel: "Identificar partes",
+  extra: ["Grillete", "Bocina", "Roda"],
+  targets: [
+    { n: 1, name: "Ancla", tx: 872, ty: 450, lx: 770, ly: 440 },
+    { n: 2, name: "Cadena", tx: 826, ty: 300, lx: 920, ly: 250 },
+    { n: 3, name: "Cabrestante", tx: 670, ty: 100, lx: 640, ly: 34 },
+    { n: 4, name: "Bita", tx: 262, ty: 108, lx: 290, ly: 34, alts: ["Bitas"] },
+    { n: 5, name: "Cabo", tx: 170, ty: 160, lx: 190, ly: 60, alts: ["Cabo de amarre", "Amarra"] },
+    { n: 6, name: "Muelle", tx: 70, ty: 300, lx: 170, ly: 400 }
+  ]
+};
+FIGS.cnLuces = {
+  w: 820, h: 440, art: cnLucesArt, typeLabel: "Identificar luces",
+  extra: ["Luz de fondeo"],
+  targets: [
+    { n: 1, name: "Luz de babor", tx: 470, ty: 182, lx: 400, ly: 50, alts: ["Babor", "Luz roja"] },
+    { n: 2, name: "Luz de estribor", tx: 470, ty: 258, lx: 400, ly: 392, alts: ["Estribor", "Luz verde"] },
+    { n: 3, name: "Luz de tope", tx: 520, ty: 220, lx: 740, ly: 90, alts: ["Tope"] },
+    { n: 4, name: "Luz de alcance", tx: 222, ty: 220, lx: 70, ly: 90, alts: ["Alcance", "Luz de popa"] }
+  ]
+};
+FIGS.cnTipos = {
+  w: 880, h: 400, art: cnTiposArt, typeLabel: "Identificar tipos",
+  extra: [],
+  targets: [
+    { n: 1, name: "Timón ordinario", tx: 120, ty: 190, lx: 110, ly: 370, alts: ["Ordinario", "Timon ordinario"] },
+    { n: 2, name: "Timón compensado", tx: 342, ty: 190, lx: 330, ly: 370, alts: ["Compensado", "Timon compensado"] },
+    { n: 3, name: "Hélice dextrógira", tx: 550, ty: 190, lx: 550, ly: 370, alts: ["Dextrógira", "Dextrogira", "Dextrógiro", "Dextrogiro", "Helice dextrogira"] },
+    { n: 4, name: "Hélice levógira", tx: 770, ty: 190, lx: 770, ly: 370, alts: ["Levógira", "Levogira", "Levógiro", "Levogiro", "Helice levogira"] }
+  ]
+};
 
 /* ---------- Dibujos ---------- */
 function cartridgeArt() {
@@ -3702,9 +4144,6 @@ ALL_UNITS.forEach(u => {
 });
 
 /* ---------- Materias ---------- */
-/* Conocimientos Náuticos: por ahora solo se muestran las Unidades 6 y 7. Las 1 a 5 quedan cargadas para más adelante. */
-const CN_VISIBLES = ["n6", "n7"];
-const TERMINOS_CN_VIS = TERMINOS_CN.filter(t => CN_VISIBLES.includes("n" + t.g.slice(1)));
 const SUBJECTS = {
   rf: {
     id: "rf", hash: "regimen", name: "Régimen del Ejercicio de la Función Policial", doc: "Régimen policial · Curso Auxiliar",
@@ -3744,14 +4183,16 @@ const SUBJECTS = {
   },
   cn: {
     id: "cn", hash: "nauticos", name: "Conocimientos Náuticos", doc: "Conocimientos Náuticos · Curso Auxiliar",
-    units: UNITS_CN.filter(u => CN_VISIBLES.includes(u.id)), unitsTxt: "Unidades 6 y 7", finalId: "final-cn", icon: s => compassIcon(s),
-    lead: `Preguntas armadas con <b>apuntes de clase</b> de las Unidades 6 y 7 (todavía no hay material oficial y los apuntes no cubren todo el programa). <b>Modo estudio:</b> después de cada respuesta ves la corrección, la explicación y, cuando ayuda, un ejemplo. Se aprueba con <b>${PASS} %</b>.`,
-    types: ["Opción múltiple", "Verdadero o falso", "Términos náuticos"],
-    finalTxt: `${FINAL_N} preguntas sorteadas de las Unidades 6 y 7.`,
-    quickTxt: `los ${TERMINOS_CN_VIS.length} términos de las Unidades 6 y 7, en los dos sentidos`,
+    units: UNITS_CN, unitsTxt: "Unidades 1 a 7", finalId: "final-cn", icon: s => compassIcon(s),
+    lead: `Preguntas armadas con <b>apuntes de clase</b> de las Unidades 1 a 7 (todavía no hay material oficial y los apuntes no cubren todo el programa). <b>Modo estudio:</b> después de cada respuesta ves la corrección, la explicación y, cuando ayuda, un ejemplo. Se aprueba con <b>${PASS} %</b>.`,
+    types: ["Opción múltiple", "Verdadero o falso", "Dibujos del buque", "Palabras y siglas"],
+    finalTxt: `${FINAL_N} preguntas sorteadas de las Unidades 1 a 7.`,
+    quickTxt: `${CN_FIGQ.length} dibujos del buque para identificar partes, y las ${PALABRAS_CN.length} palabras y ${SIGLAS_CN.length} siglas que se usan en Prefectura`,
     quick: [
-      { deck: "terminos", mode: "ba", title: "¿Qué término es?", small: `Las ${TERMINOS_CN_VIS.length} definiciones: elegís el término`, thumb: () => tokensThumb(["SOLAS", "SAR", "AIS", "MAS"]) },
-      { deck: "terminos", mode: "ab", title: "¿Qué significa?", small: `Los ${TERMINOS_CN_VIS.length} términos: elegís la definición`, thumb: () => tokensThumb(["SAR", "SOLAS", "MAS", "AIS"]) }
+      ...CN_FIGQ.map(f => ({ fig: f.key, title: f.title, small: `${f.sub} · ${FIGS[f.key].targets.length} ${f.key === "cnLuces" ? "luces" : f.key === "cnTipos" ? "tipos" : f.key === "cnDim" ? "medidas y marcas" : f.key === "cnEstab" ? "puntos" : "partes"} · elegir o escribir` })),
+      { deck: "palabras", mode: "ab", title: "¿Qué significa?", small: `Las ${PALABRAS_CN.length} palabras (amura, cobrar, filar, varado…): elegís el significado`, thumb: () => tokensThumb(["Amura", "Filar", "Varado", "Bita"]) },
+      { deck: "palabras", mode: "ba", title: "¿Qué palabra es?", small: `Los ${PALABRAS_CN.length} significados: elegís la palabra que usan en Prefectura`, thumb: () => tokensThumb(["Cobrar", "Escora", "Calado", "Proa"]) },
+      { deck: "siglas_cn", mode: "mix", title: "Siglas náuticas", small: `Las ${SIGLAS_CN.length} siglas (SOLAS, SAR, RIPA, REY…) en los dos sentidos`, thumb: () => tokensThumb(["SOLAS", "SAR", "RIPA", "REY"]) }
     ]
   }
 };
@@ -3784,8 +4225,10 @@ const DECKS = {
   alfabeto: { title: "Alfabeto fonético", items: ALFABETO,
     qwrite: it => `¿Qué palabra corresponde a la letra «${it.a}»?`, wtext: it => `${it.a} = {{${[it.b, ...it.alt].join("|")}}}`,
     qab: it => `¿Qué palabra corresponde a la letra «${it.a}»?`, qba: it => `¿Qué letra se dice «${it.b}»?`, sub: { mix: "Letra ↔ palabra", write: "Letra → palabra (escribir)" } },
-  terminos: { title: "Términos náuticos", items: TERMINOS_CN_VIS,
-    qab: it => `¿Qué significa «${it.a}»?`, qba: it => `¿Qué término corresponde a: «${it.b}»?`, sub: { ab: "Del término a la definición", ba: "De la definición al término" } },
+  palabras: { title: "Palabras de Prefectura", items: PALABRAS_CN,
+    qab: it => `¿Qué significa «${it.a}»?`, qba: it => `¿Qué palabra se usa para: «${it.b}»?`, sub: { ab: "De la palabra al significado", ba: "Del significado a la palabra" } },
+  siglas_cn: { title: "Siglas náuticas", items: SIGLAS_CN,
+    qab: it => `¿Qué significa «${it.a}»?`, qba: it => `¿Qué sigla corresponde a: «${it.b}»?`, sub: { mix: "Sigla ↔ significado" } },
   uniformes: { title: "Uniformes por número", items: UNIFORMES.map((u, i) => ({ ...u, img: UNIF_IMG["u" + (i + 1)] })), alwaysImg: true, imgAlt: "Foto del uniforme, del reglamento",
     qab: it => `¿Qué uniforme es el ${it.a}?`, qba: it => `¿Qué número tiene el uniforme ${it.b}?`, sub: { mix: "Número ↔ uniforme", ba: "¿Qué número es?" } }
 };
@@ -3811,7 +4254,8 @@ const FIG_PRACTICE = [
   { key: "beretta", title: "Partes de la pistola", sub: "Beretta 92 FS · vista del lado izquierdo" },
   { key: "cartucho", title: "Partes del cartucho", sub: "Munición 9 × 19 mm" },
   { key: "anima", title: "Calibre real y nominal", sub: "Corte del cañón estriado" },
-  { key: "zonas", subj: "ori", title: "Mapa de Prefecturas de Zona", sub: "Ubicá las 10 zonas en el mapa" }
+  { key: "zonas", subj: "ori", title: "Mapa de Prefecturas de Zona", sub: "Ubicá las 10 zonas en el mapa" },
+  ...CN_FIGQ
 ];
 const typeLabel = q => q.chip || (q.t === "label" && FIGS[q.fig] && FIGS[q.fig].typeLabel) || TYPE_LABEL[q.t];
 
@@ -3920,7 +4364,7 @@ function startQuiz(kind, payload) {
   } else if (kind === "fig") {
     const f = FIG_PRACTICE.find(x => x.key === payload);
     id = "fig-" + f.key; title = f.title; sub = "Repaso de imagen";
-    qs = [ALL_UNITS.flatMap(u => u.questions).find(q => q.t === "label" && q.fig === f.key)];
+    qs = [f.lq || ALL_UNITS.flatMap(u => u.questions).find(q => q.t === "label" && q.fig === f.key)];
   } else {
     id = payload.id; title = payload.title; sub = "Repaso de errores";
     qs = shuffle(payload.qs);
